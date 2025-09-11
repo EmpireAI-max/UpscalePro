@@ -1499,29 +1499,53 @@
                 else return (bytes / 1048576).toFixed(1) + ' MB';
             }
             
-            // Download button handler - FIXED VERSION
+            // Download button handler
             downloadBtn.addEventListener('click', function() {
                 if (!processedImageData) {
                     showToast('No image available for download.', 'error');
                     return;
                 }
-                
-                // Create a download link
-                const downloadLink = document.createElement('a');
+
                 const fileName = `upscaled-${processedFileName}-${selectedResolution}.${selectedFormat}`;
+
+                // Create an image element to draw on the canvas
+                const img = new Image();
+                img.onload = () => {
+                    // Create a canvas
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Set canvas dimensions to match the image
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    // Draw the image onto the canvas
+                    ctx.drawImage(img, 0, 0);
+
+                    // Get the data URL in the selected format
+                    // For 'jpg', the mime type is 'image/jpeg'
+                    const mimeType = `image/${selectedFormat === 'jpg' ? 'jpeg' : selectedFormat}`;
+                    const dataUrl = canvas.toDataURL(mimeType);
+
+                    // Create a download link
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = dataUrl;
+                    downloadLink.download = fileName;
+
+                    // Trigger download
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+
+                    // Show success message
+                    showToast(`Image downloaded as ${fileName}`);
+                };
                 
-                // In a real application, this would be the actual upscaled image data
-                // For demo purposes, we're using the original image data
-                downloadLink.href = processedImageData;
-                downloadLink.download = fileName;
-                
-                // Trigger download
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                
-                // Show success message
-                showToast(`Image downloaded as ${fileName}`);
+                img.onerror = () => {
+                    showToast('Failed to load image for conversion.', 'error');
+                };
+
+                img.src = processedImageData;
             });
             
             // Upscale another button handler
