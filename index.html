@@ -6,6 +6,12 @@
     <title>UpscalePro | Convert Low-Res Images to 2K/4K</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /*
+         * Main stylesheet for the UpscalePro application.
+         * This file contains all the styles for the single-page application.
+         */
+
+        /* CSS variables for consistent theming */
         :root {
             --primary: #4a6cf7;
             --primary-dark: #3b5be3;
@@ -740,6 +746,7 @@
         }
 
         /* Responsive Design */
+        /* Adjustments for tablets and smaller desktops */
         @media (max-width: 768px) {
             body {
                 padding-top: 70px;
@@ -905,7 +912,7 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header: Contains the navigation bar, logo, and main call-to-action button. -->
     <header>
         <div class="container">
             <nav class="navbar">
@@ -932,7 +939,7 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section: The main landing section with a headline and a call-to-action button. -->
     <section class="hero" id="home">
         <div class="container">
             <h1>Transform Your Low-Res Images to Stunning 2K/4K</h1>
@@ -941,7 +948,7 @@
         </div>
     </section>
 
-    <!-- Upload Section -->
+    <!-- Upload Section: Contains the file upload functionality, resolution, and format options. -->
     <section class="upload-section" id="upload">
         <div class="container">
             <div class="section-title">
@@ -997,7 +1004,7 @@
         </div>
     </section>
 
-    <!-- Preview Section -->
+    <!-- Preview Section: Displays the original and upscaled images side by side. -->
     <section class="preview-section" id="preview">
         <div class="container">
             <div class="section-title">
@@ -1040,7 +1047,7 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Features Section: Highlights the key features of the application. -->
     <section class="features" id="features">
         <div class="container">
             <div class="section-title">
@@ -1122,7 +1129,7 @@
                             <li><i class="fas fa-times" style="color: #dc3545;"></i> Watermark on output</li>
                         </ul>
                         <div class="pricing-action">
-                            <button class="btn" onclick="openModal('free')">Get Started</button>
+                            <button class="btn" data-plan="free">Get Started</button>
                         </div>
                     </div>
                 </div>
@@ -1140,7 +1147,7 @@
                             <li><i class="fas fa-check" style="color: var(--success);"></i> No watermark</li>
                         </ul>
                         <div class="pricing-action">
-                            <button class="btn" onclick="openModal('pro')">Get Started</button>
+                            <button class="btn" data-plan="pro">Get Started</button>
                         </div>
                     </div>
                 </div>
@@ -1158,7 +1165,7 @@
                             <li><i class="fas fa-check" style="color: var(--success);"></i> Batch processing</li>
                         </ul>
                         <div class="pricing-action">
-                            <button class="btn" onclick="openModal('enterprise')">Get Started</button>
+                            <button class="btn" data-plan="enterprise">Get Started</button>
                         </div>
                     </div>
                 </div>
@@ -1217,7 +1224,7 @@
     <!-- Subscription Modal -->
     <div class="modal" id="subscription-modal">
         <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <span class="modal-close">&times;</span>
             <div class="modal-header">
                 <h2 id="modal-title">Subscribe to Pro Plan</h2>
                 <p>Complete your subscription in a few simple steps</p>
@@ -1235,7 +1242,7 @@
                     <h3>Selected Plan: <span id="selected-plan">Pro Plan</span></h3>
                     <p>Price: $9/month</p>
                 </div>
-                <button class="btn" onclick="nextPage(2)">Continue</button>
+                <button class="btn" data-page="2">Continue</button>
             </div>
             
             <div class="form-page" id="page-2">
@@ -1251,7 +1258,7 @@
                     <label for="confirm-password">Confirm Password</label>
                     <input type="password" id="confirm-password" placeholder="Confirm your password">
                 </div>
-                <button class="btn" onclick="nextPage(3)">Continue</button>
+                <button class="btn" data-page="3">Continue</button>
             </div>
             
             <div class="form-page" id="page-3">
@@ -1273,7 +1280,7 @@
                         <input type="text" id="cvv" placeholder="CVV">
                     </div>
                 </div>
-                <button class="btn" onclick="nextPage(4)">Complete Payment</button>
+                <button class="btn" data-page="4">Complete Payment</button>
             </div>
             
             <div class="form-page" id="page-4">
@@ -1281,7 +1288,7 @@
                     <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success); margin-bottom: 20px;"></i>
                     <h3>Subscription Successful!</h3>
                     <p>Thank you for subscribing to our <span id="success-plan">Pro Plan</span>. You now have access to all premium features.</p>
-                    <button class="btn" onclick="closeModal()">Start Upscaling</button>
+                    <button class="btn" id="start-upscaling-btn">Start Upscaling</button>
                 </div>
             </div>
         </div>
@@ -1294,354 +1301,341 @@
     </div>
 
     <script>
-        // Global variables
-        let selectedResolution = '2k';
-        let selectedFormat = 'jpg';
-        let processedImageData = null;
-        let processedImageType = '';
-        let processedFileName = '';
-        let currentPlan = 'pro';
-        let currentPage = 1;
+        /**
+         * @file Manages the core functionality of the UpscalePro application.
+         * @description This script handles image uploading, processing, UI interactions, and the subscription modal.
+         * @global
+         */
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const fileInput = document.getElementById('file-input');
-            const dropZone = document.getElementById('drop-zone');
-            const previewSection = document.querySelector('.preview-section');
-            const uploadSection = document.querySelector('.upload-section');
-            const originalImg = document.getElementById('original-img');
-            const upscaledImg = document.getElementById('upscaled-img');
-            const originalInfo = document.getElementById('original-info');
-            const upscaledInfo = document.getElementById('upscaled-info');
-            const downloadBtn = document.getElementById('download-btn');
-            const upscaleAnotherBtn = document.getElementById('upscale-another');
-            const spinner = document.getElementById('spinner');
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            const option2k = document.getElementById('option-2k');
-            const option4k = document.getElementById('option-4k');
-            const optionJpg = document.getElementById('option-jpg');
-            const optionPng = document.getElementById('option-png');
-            const optionWebp = document.getElementById('option-webp');
-            const resolutionLabel = document.getElementById('resolution-label');
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
-            
-            // Mobile menu toggle
-            menuToggle.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
-            });
-            
-            // Resolution selection
-            option2k.addEventListener('click', function() {
-                selectedResolution = '2k';
-                option2k.classList.add('selected');
-                option4k.classList.remove('selected');
-            });
-            
-            option4k.addEventListener('click', function() {
-                selectedResolution = '4k';
-                option4k.classList.add('selected');
-                option2k.classList.remove('selected');
-            });
-            
-            // Format selection
-            optionJpg.addEventListener('click', function() {
-                selectedFormat = 'jpg';
-                optionJpg.classList.add('selected');
-                optionPng.classList.remove('selected');
-                optionWebp.classList.remove('selected');
-            });
-            
-            optionPng.addEventListener('click', function() {
-                selectedFormat = 'png';
-                optionPng.classList.add('selected');
-                optionJpg.classList.remove('selected');
-                optionWebp.classList.remove('selected');
-            });
-            
-            optionWebp.addEventListener('click', function() {
-                selectedFormat = 'webp';
-                optionWebp.classList.add('selected');
-                optionJpg.classList.remove('selected');
-                optionPng.classList.remove('selected');
-            });
-            
-            // Initialize selected options
-            option2k.classList.add('selected');
-            optionJpg.classList.add('selected');
-            
-            // Click on drop zone to trigger file input
-            dropZone.addEventListener('click', () => {
-                fileInput.click();
-            });
-            
-            // Handle file selection
-            fileInput.addEventListener('change', function(e) {
-                if (this.files && this.files[0]) {
-                    processImage(this.files[0]);
-                }
-            });
-            
-            // Drag and drop handling
-            dropZone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.style.borderColor = '#4a6cf7';
-                this.style.backgroundColor = '#f0f4ff';
-            });
-            
-            dropZone.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                this.style.borderColor = '#ccc';
-                this.style.backgroundColor = 'transparent';
-            });
-            
-            dropZone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.style.borderColor = '#ccc';
-                this.style.backgroundColor = 'transparent';
-                
-                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                    processImage(e.dataTransfer.files[0]);
-                }
-            });
-            
-            // Process the uploaded image
-            function processImage(file) {
-                if (!file.type.match('image.*')) {
-                    showToast('Please upload an image file.', 'error');
-                    return;
-                }
-                
-                if (file.size > 20 * 1024 * 1024) {
-                    showToast('File size exceeds 20MB limit.', 'error');
-                    return;
-                }
-                
-                // Store the original file name
-                processedFileName = file.name.split('.')[0];
-                
-                // Show loading spinner
-                spinner.style.display = 'block';
-                
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    // Store the original image data and type
-                    processedImageType = file.type;
-                    
-                    // Display original image
-                    originalImg.src = e.target.result;
-                    
-                    // Get image dimensions
-                    const img = new Image();
-                    img.onload = function() {
-                        const originalWidth = img.width;
-                        const originalHeight = img.height;
-                        
-                        // Update original info
-                        originalInfo.textContent = `Resolution: ${originalWidth}x${originalHeight} • Size: ${formatFileSize(file.size)}`;
-                        
-                        // Simulate upscaling process
-                        setTimeout(() => {
-                            // Hide spinner
-                            spinner.style.display = 'none';
-                            
-                            // Determine target resolution
-                            let targetWidth, targetHeight, resolutionText;
-                            
-                            if (selectedResolution === '2k') {
-                                targetWidth = 2560;
-                                targetHeight = 1440;
-                                resolutionText = '2K';
-                            } else {
-                                targetWidth = 3840;
-                                targetHeight = 2160;
-                                resolutionText = '4K';
-                            }
-                            
-                            // Update resolution label
-                            resolutionLabel.textContent = `(${resolutionText})`;
-                            
-                            // For demo purposes, we're using the same image but simulating upscaling
-                            // In a real application, this would be the actual upscaled version from the server
-                            upscaledImg.src = e.target.result;
-                            
-                            // Calculate simulated file size (larger due to upscaling)
-                            const simulatedSize = Math.min(file.size * 3.5, 10 * 1024 * 1024); // Cap at 10MB for demo
-                            
-                            // Update upscaled info
-                            upscaledInfo.textContent = `Resolution: ${targetWidth}x${targetHeight} (${resolutionText}) • Size: ${formatFileSize(simulatedSize)}`;
-                            
-                            // Store the processed image data for download
-                            processedImageData = e.target.result;
-                            
-                            // Show preview section
-                            uploadSection.style.display = 'none';
-                            previewSection.style.display = 'block';
-                            
-                            // Scroll to preview section
-                            document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
-                            
-                            // Show success message
-                            showToast(`Image successfully upscaled to ${resolutionText}!`);
-                        }, 2000); // Simulate 2 second processing time
-                    };
-                    img.src = e.target.result;
+        // --- DOM Element References ---
+        const dom = {
+            fileInput: document.getElementById('file-input'),
+            dropZone: document.getElementById('drop-zone'),
+            previewSection: document.querySelector('.preview-section'),
+            uploadSection: document.querySelector('.upload-section'),
+            originalImg: document.getElementById('original-img'),
+            upscaledImg: document.getElementById('upscaled-img'),
+            originalInfo: document.getElementById('original-info'),
+            upscaledInfo: document.getElementById('upscaled-info'),
+            downloadBtn: document.getElementById('download-btn'),
+            upscaleAnotherBtn: document.getElementById('upscale-another'),
+            spinner: document.getElementById('spinner'),
+            menuToggle: document.getElementById('menuToggle'),
+            navLinks: document.getElementById('navLinks'),
+            option2k: document.getElementById('option-2k'),
+            option4k: document.getElementById('option-4k'),
+            optionJpg: document.getElementById('option-jpg'),
+            optionPng: document.getElementById('option-png'),
+            optionWebp: document.getElementById('option-webp'),
+            resolutionLabel: document.getElementById('resolution-label'),
+            toast: document.getElementById('toast'),
+            toastMessage: document.getElementById('toast-message'),
+            subscriptionModal: document.getElementById('subscription-modal'),
+            modalTitle: document.getElementById('modal-title'),
+            selectedPlan: document.getElementById('selected-plan'),
+            successPlan: document.getElementById('success-plan'),
+            startUpscalingBtn: document.getElementById('start-upscaling-btn')
+        };
+
+        // --- Application State ---
+        const state = {
+            selectedResolution: '2k',
+            selectedFormat: 'jpg',
+            processedImageData: null,
+            processedImageType: '',
+            processedFileName: '',
+            currentPlan: 'pro',
+            currentPage: 1
+        };
+
+        /**
+         * Toggles the mobile navigation menu.
+         */
+        function handleMenuToggle() {
+            dom.navLinks.classList.toggle('active');
+        }
+
+        /**
+         * Updates the selected resolution and styles the option buttons.
+         * @param {'2k' | '4k'} resolution - The resolution to select.
+         */
+        function selectResolution(resolution) {
+            state.selectedResolution = resolution;
+            dom.option2k.classList.toggle('selected', resolution === '2k');
+            dom.option4k.classList.toggle('selected', resolution === '4k');
+        }
+
+        /**
+         * Updates the selected format and styles the option buttons.
+         * @param {'jpg' | 'png' | 'webp'} format - The format to select.
+         */
+        function selectFormat(format) {
+            state.selectedFormat = format;
+            dom.optionJpg.classList.toggle('selected', format === 'jpg');
+            dom.optionPng.classList.toggle('selected', format === 'png');
+            dom.optionWebp.classList.toggle('selected', format === 'webp');
+        }
+
+        /**
+         * Processes the uploaded image file.
+         * Validates the file, reads it as a data URL, and simulates the upscaling process.
+         * @param {File} file - The image file to process.
+         */
+        function processImage(file) {
+            if (!file.type.startsWith('image/')) {
+                showToast('Please upload a valid image file.', 'error');
+                return;
+            }
+            if (file.size > 20 * 1024 * 1024) { // 20MB
+                showToast('File size exceeds the 20MB limit.', 'error');
+                return;
+            }
+
+            state.processedFileName = file.name.split('.').slice(0, -1).join('.') || file.name;
+            dom.spinner.style.display = 'block';
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    displayOriginalImage(e.target.result, file.size, img.width, img.height);
+                    simulateUpscaling(e.target.result, file.size);
                 };
-                
-                reader.readAsDataURL(file);
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /**
+         * Displays the original image and its metadata.
+         * @param {string} src - The base64 source of the image.
+         * @param {number} size - The size of the image in bytes.
+         * @param {number} width - The width of the image.
+         * @param {number} height - The height of the image.
+         */
+        function displayOriginalImage(src, size, width, height) {
+            dom.originalImg.src = src;
+            dom.originalInfo.textContent = `Resolution: ${width}x${height} • Size: ${formatFileSize(size)}`;
+        }
+
+        /**
+         * Simulates the image upscaling process and updates the UI with the results.
+         * @param {string} originalImageSrc - The base64 source of the original image.
+         * @param {number} originalSize - The size of the original image in bytes.
+         */
+        function simulateUpscaling(originalImageSrc, originalSize) {
+            setTimeout(() => {
+                dom.spinner.style.display = 'none';
+                const { width, height, text } = state.selectedResolution === '2k'
+                    ? { width: 2560, height: 1440, text: '2K' }
+                    : { width: 3840, height: 2160, text: '4K' };
+
+                dom.resolutionLabel.textContent = `(${text})`;
+                dom.upscaledImg.src = originalImageSrc; // Demo: use same image
+
+                const simulatedSize = Math.min(originalSize * (Math.random() * 2 + 2), 10 * 1024 * 1024); // Cap at 10MB
+                dom.upscaledInfo.textContent = `Resolution: ${width}x${height} (${text}) • Size: ${formatFileSize(simulatedSize)}`;
+
+                state.processedImageData = originalImageSrc;
+
+                dom.uploadSection.style.display = 'none';
+                dom.previewSection.style.display = 'block';
+                dom.previewSection.scrollIntoView({ behavior: 'smooth' });
+
+                showToast(`Image successfully upscaled to ${text}!`);
+            }, 2000); // 2-second delay
+        }
+
+        /**
+         * Formats a file size in bytes to a human-readable string (KB, MB).
+         * @param {number} bytes - The file size in bytes.
+         * @returns {string} The formatted file size.
+         */
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        /**
+         * Initiates the download of the processed image.
+         */
+        function downloadProcessedImage() {
+            if (!state.processedImageData) {
+                showToast('No image available for download.', 'error');
+                return;
+            }
+            const link = document.createElement('a');
+            const fileName = `upscaled-${state.processedFileName}-${state.selectedResolution}.${state.selectedFormat}`;
+            link.href = state.processedImageData;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast(`Downloading ${fileName}`);
+        }
+
+        /**
+         * Resets the UI to allow for another image upload.
+         */
+        function resetUploader() {
+            dom.previewSection.style.display = 'none';
+            dom.uploadSection.style.display = 'block';
+            dom.fileInput.value = ''; // Reset file input
+            state.processedImageData = null;
+            dom.uploadSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Displays a toast notification.
+         * @param {string} message - The message to display.
+         * @param {'success'|'error'|'warning'} [type='success'] - The type of toast.
+         */
+        function showToast(message, type = 'success') {
+            dom.toastMessage.textContent = message;
+            dom.toast.className = 'toast'; // Reset classes
+            
+            const icon = dom.toast.querySelector('i');
+            if (type === 'error') {
+                dom.toast.classList.add('error');
+                icon.className = 'fas fa-exclamation-circle';
+            } else if (type === 'warning') {
+                dom.toast.classList.add('warning');
+                icon.className = 'fas fa-exclamation-triangle';
+            } else {
+                icon.className = 'fas fa-check-circle';
             }
             
-            // Format file size
-            function formatFileSize(bytes) {
-                if (bytes < 1024) return bytes + ' bytes';
-                else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-                else return (bytes / 1048576).toFixed(1) + ' MB';
-            }
+            dom.toast.classList.add('show');
+            setTimeout(() => dom.toast.classList.remove('show'), 3000);
+        }
+
+        /**
+         * Opens the subscription modal and sets the selected plan.
+         * @param {('free'|'pro'|'enterprise')} plan - The subscription plan to feature in the modal.
+         */
+        function openModal(plan) {
+            state.currentPlan = plan;
+            const planDetails = {
+                free: { name: 'Free Plan', price: '$0' },
+                pro: { name: 'Pro Plan', price: '$9' },
+                enterprise: { name: 'Enterprise Plan', price: '$29' }
+            };
+            const details = planDetails[plan] || planDetails.pro;
             
-            // Download button handler - FIXED VERSION
-            downloadBtn.addEventListener('click', function() {
-                if (!processedImageData) {
-                    showToast('No image available for download.', 'error');
-                    return;
-                }
-                
-                // Create a download link
-                const downloadLink = document.createElement('a');
-                const fileName = `upscaled-${processedFileName}-${selectedResolution}.${selectedFormat}`;
-                
-                // In a real application, this would be the actual upscaled image data
-                // For demo purposes, we're using the original image data
-                downloadLink.href = processedImageData;
-                downloadLink.download = fileName;
-                
-                // Trigger download
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                
-                // Show success message
-                showToast(`Image downloaded as ${fileName}`);
+            dom.modalTitle.textContent = `Subscribe to ${details.name}`;
+            dom.selectedPlan.textContent = `${details.name} (${details.price}/month)`;
+            dom.successPlan.textContent = details.name;
+            
+            state.currentPage = 1;
+            updateFormSteps();
+            dom.subscriptionModal.style.display = 'flex';
+        }
+
+        /**
+         * Closes the subscription modal.
+         */
+        function closeModal() {
+            dom.subscriptionModal.style.display = 'none';
+        }
+
+        /**
+         * Navigates to the next page in the subscription modal form.
+         * @param {number} pageNum - The page number to navigate to.
+         */
+        function nextPage(pageNum) {
+            state.currentPage = pageNum;
+            updateFormSteps();
+        }
+
+        /**
+         * Updates the visual state of the form steps in the subscription modal.
+         */
+        function updateFormSteps() {
+            for (let i = 1; i <= 4; i++) {
+                const step = document.getElementById(`step-${i}`);
+                const page = document.getElementById(`page-${i}`);
+                const isActive = (i === state.currentPage);
+                step.classList.toggle('active', isActive);
+                page.classList.toggle('active', isActive);
+            }
+        }
+
+        /**
+         * Sets up all event listeners for the application.
+         */
+        function setupEventListeners() {
+            dom.menuToggle.addEventListener('click', handleMenuToggle);
+            
+            dom.option2k.addEventListener('click', () => selectResolution('2k'));
+            dom.option4k.addEventListener('click', () => selectResolution('4k'));
+            
+            dom.optionJpg.addEventListener('click', () => selectFormat('jpg'));
+            dom.optionPng.addEventListener('click', () => selectFormat('png'));
+            dom.optionWebp.addEventListener('click', () => selectFormat('webp'));
+            
+            dom.dropZone.addEventListener('click', () => dom.fileInput.click());
+            dom.fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) processImage(e.target.files[0]);
             });
             
-            // Upscale another button handler
-            upscaleAnotherBtn.addEventListener('click', function() {
-                previewSection.style.display = 'none';
-                uploadSection.style.display = 'block';
-                fileInput.value = '';
-                processedImageData = null;
-                document.getElementById('upload').scrollIntoView({ behavior: 'smooth' });
+            // Drag and drop events
+            dom.dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dom.dropZone.style.borderColor = 'var(--primary)';
             });
+            dom.dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dom.dropZone.style.borderColor = '#ccc';
+            });
+            dom.dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dom.dropZone.style.borderColor = '#ccc';
+                if (e.dataTransfer.files.length) processImage(e.dataTransfer.files[0]);
+            });
+
+            dom.downloadBtn.addEventListener('click', downloadProcessedImage);
+            dom.upscaleAnotherBtn.addEventListener('click', resetUploader);
             
-            // Show toast notification
-            function showToast(message, type = 'success') {
-                toastMessage.textContent = message;
-                toast.className = 'toast';
-                
-                if (type === 'error') {
-                    toast.classList.add('error');
-                    toast.querySelector('i').className = 'fas fa-exclamation-circle';
-                } else if (type === 'warning') {
-                    toast.classList.add('warning');
-                    toast.querySelector('i').className = 'fas fa-exclamation-triangle';
-                } else {
-                    toast.querySelector('i').className = 'fas fa-check-circle';
-                }
-                
-                toast.classList.add('show');
-                
-                // Hide after 3 seconds
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
-            }
+            // Modal events
+            document.querySelectorAll('.btn[data-plan]').forEach(button => {
+                button.addEventListener('click', () => openModal(button.dataset.plan));
+            });
+
+            document.querySelector('.modal-close').addEventListener('click', closeModal);
             
-            // Smooth scrolling for anchor links
+            document.querySelectorAll('.btn[data-page]').forEach(button => {
+                button.addEventListener('click', () => nextPage(parseInt(button.dataset.page)));
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === dom.subscriptionModal) closeModal();
+            });
+
+            // Smooth scrolling
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     if (this.getAttribute('href') === '#') return;
-                    
                     e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    
-                    // Close mobile menu if open
-                    navLinks.classList.remove('active');
-                    
-                    const targetElement = document.querySelector(targetId);
+                    dom.navLinks.classList.remove('active'); // Close mobile menu
+                    const targetElement = document.querySelector(this.getAttribute('href'));
                     if (targetElement) {
                         targetElement.scrollIntoView({ behavior: 'smooth' });
                     }
                 });
             });
-        });
-
-        // Modal functions
-        function openModal(plan) {
-            currentPlan = plan;
-            const modal = document.getElementById('subscription-modal');
-            const planTitle = document.getElementById('selected-plan');
-            const successPlan = document.getElementById('success-plan');
-            
-            // Set plan title based on selection
-            let planName, planPrice;
-            switch(plan) {
-                case 'free':
-                    planName = 'Free Plan';
-                    planPrice = '$0';
-                    break;
-                case 'pro':
-                    planName = 'Pro Plan';
-                    planPrice = '$9';
-                    break;
-                case 'enterprise':
-                    planName = 'Enterprise Plan';
-                    planPrice = '$29';
-                    break;
-            }
-            
-            planTitle.textContent = `${planName} (${planPrice}/month)`;
-            successPlan.textContent = planName;
-            document.getElementById('modal-title').textContent = `Subscribe to ${planName}`;
-            
-            // Reset form to first page
-            currentPage = 1;
-            updateFormSteps();
-            
-            modal.style.display = 'flex';
         }
 
-        function closeModal() {
-            const modal = document.getElementById('subscription-modal');
-            modal.style.display = 'none';
-        }
-
-        function nextPage(pageNum) {
-            currentPage = pageNum;
-            updateFormSteps();
-        }
-
-        function updateFormSteps() {
-            // Update step indicators
-            for (let i = 1; i <= 4; i++) {
-                const step = document.getElementById(`step-${i}`);
-                const page = document.getElementById(`page-${i}`);
-                
-                if (i === currentPage) {
-                    step.classList.add('active');
-                    page.classList.add('active');
-                } else {
-                    step.classList.remove('active');
-                    page.classList.remove('active');
-                }
-            }
-        }
-
-        // Close modal if clicked outside
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('subscription-modal');
-            if (event.target === modal) {
-                closeModal();
-            }
+        /**
+         * Initializes the application when the DOM is fully loaded.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial state
+            selectResolution('2k');
+            selectFormat('jpg');
+            setupEventListeners();
         });
     </script>
 </body>

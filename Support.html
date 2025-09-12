@@ -6,6 +6,12 @@
     <title>UpscalePro - Support & Legal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /*
+         * Main stylesheet for the Support page.
+         * This file contains all the styles for the support page.
+         */
+
+        /* CSS variables for consistent theming */
         :root {
             --primary: #4a6cf7;
             --primary-dark: #3b5be3;
@@ -308,6 +314,7 @@
         }
 
         /* Responsive Design */
+        /* Adjustments for tablets and smaller desktops */
         @media (max-width: 768px) {
             .navbar {
                 padding: 12px 0;
@@ -363,7 +370,7 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header: Contains the navigation bar and logo. -->
     <header>
         <div class="container">
             <nav class="navbar">
@@ -382,7 +389,7 @@
         </div>
     </header>
 
-    <!-- Page Header -->
+    <!-- Page Header: A simple header with a title and a subtitle. -->
     <div class="page-header">
         <div class="container">
             <h1>Support & Legal Documents</h1>
@@ -391,7 +398,7 @@
     </div>
 
     <div class="container">
-        <!-- Table of Contents -->
+        <!-- Table of Contents: A navigation menu for the different sections on the page. -->
         <div class="toc">
             <h3>On This Page</h3>
             <ul>
@@ -402,7 +409,7 @@
             </ul>
         </div>
 
-        <!-- Help Center -->
+        <!-- Help Center: A section with information on how to use the application. -->
         <section id="help" class="content-section">
             <h2>Help Center</h2>
             <p>Welcome to the UpscalePro Help Center. Here you'll find resources to help you get the most out of our image upscaling service.</p>
@@ -433,7 +440,7 @@
             <p>Response time: Typically within 24 hours</p>
         </section>
 
-        <!-- FAQs -->
+        <!-- FAQs: A list of frequently asked questions and their answers. -->
         <section id="faq" class="content-section">
             <h2>Frequently Asked Questions</h2>
             
@@ -518,7 +525,7 @@
             </div>
         </section>
 
-        <!-- Terms of Service -->
+        <!-- Terms of Service: The terms of service for the application. -->
         <section id="terms" class="content-section">
             <h2>Terms of Service</h2>
             <p><strong>Last Updated: January 1, 2023</strong></p>
@@ -670,62 +677,106 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // FAQ toggle functionality
-            const faqQuestions = document.querySelectorAll('.faq-question');
-            
-            faqQuestions.forEach(question => {
-                question.addEventListener('click', () => {
-                    const answer = question.nextElementSibling;
-                    const isActive = question.classList.contains('active');
-                    
-                    // Close all answers
-                    document.querySelectorAll('.faq-answer').forEach(ans => {
-                        ans.classList.remove('show');
-                    });
-                    document.querySelectorAll('.faq-question').forEach(q => {
-                        q.classList.remove('active');
-                    });
-                    
-                    // Open clicked answer if it wasn't already active
-                    if (!isActive) {
-                        answer.classList.add('show');
-                        question.classList.add('active');
-                    }
-                });
+        /**
+         * @file Manages the interactive elements on the Support page.
+         * @description This script handles the FAQ accordion, the back-to-top button, and smooth scrolling for anchor links.
+         * @global
+        */
+
+        /**
+         * Toggles the display of an FAQ answer when its question is clicked.
+         * It ensures that only one answer is visible at a time.
+         * @param {Event} event - The click event from the FAQ question.
+         */
+        function handleFaqToggle(event) {
+            const question = event.currentTarget;
+            const answer = question.nextElementSibling;
+            const allQuestions = document.querySelectorAll('.faq-question');
+            const isActive = question.classList.contains('active');
+
+            // Close all other open answers
+            allQuestions.forEach(q => {
+                q.classList.remove('active');
+                q.nextElementSibling.classList.remove('show');
             });
-            
-            // Back to top button
+
+            // If the clicked question was not active, open it.
+            if (!isActive) {
+                question.classList.add('active');
+                answer.classList.add('show');
+            }
+        }
+
+        /**
+         * Controls the visibility of the back-to-top button.
+         * The button appears when the user scrolls down 300 pixels.
+         */
+        function handleBackToTopVisibility() {
             const backToTopButton = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        }
+
+        /**
+         * Smoothly scrolls the page to the top.
+         * @param {Event} event - The click event from the back-to-top button.
+         */
+        function handleScrollToTop(event) {
+            event.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /**
+         * Smoothly scrolls to an element on the page when an anchor link is clicked.
+         * @param {Event} event - The click event from an anchor link.
+         */
+        function handleSmoothScroll(event) {
+            const link = event.currentTarget;
+            // Do not scroll for empty hrefs
+            if (link.getAttribute('href') === '#') {
+                event.preventDefault();
+                return;
+            }
             
-            window.addEventListener('scroll', () => {
-                if (window.pageYOffset > 300) {
-                    backToTopButton.classList.add('visible');
-                } else {
-                    backToTopButton.classList.remove('visible');
+            const targetId = link.getAttribute('href');
+            // only handle on-page links
+            if (targetId.startsWith('#')) {
+                event.preventDefault();
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
+            }
+        }
+
+        /**
+         * Attaches all necessary event listeners for the page's interactive elements.
+         */
+        function setupEventListeners() {
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.addEventListener('click', handleFaqToggle);
             });
-            
-            backToTopButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-            
-            // Smooth scrolling for anchor links
+
+            document.querySelector('.back-to-top').addEventListener('click', handleScrollToTop);
+
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    if (this.getAttribute('href') === '#') return;
-                    
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
+                anchor.addEventListener('click', handleSmoothScroll);
             });
-        });
+
+            window.addEventListener('scroll', handleBackToTopVisibility);
+        }
+
+        /**
+         * Initializes the application once the DOM is fully loaded.
+         */
+        document.addEventListener('DOMContentLoaded', setupEventListeners);
     </script>
 </body>
 </html>
