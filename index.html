@@ -1520,15 +1520,52 @@
                 if (bytes < 1024) return bytes + ' bytes';
                 else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
                 else return (bytes / 1048576).toFixed(1) + ' MB';
-            }
-            
-            // Download button handler
-            downloadBtn.addEventListener('click', function() {
-                if (!processedImageData) {
-                    showToast('No image available for download.', 'error');
-                    return;
-                }
-                
+          <script>
+    // ... your other code ...
+
+    downloadBtn.addEventListener('click', function() {
+        if (!processedImageData) {
+            showToast('No image available for download.', 'error');
+            return;
+        }
+
+        // Create an image object from the original data
+        const img = new Image();
+        img.onload = function() {
+            // Choose resolution based on selectedResolution
+            let targetWidth = selectedResolution === '2k' ? 2560 : 3840;
+            let targetHeight = selectedResolution === '2k' ? 1440 : 2160;
+
+            // Create a canvas to upscale the image
+            const canvas = document.createElement('canvas');
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+            // Set output format
+            let mimeType = 'image/jpeg';
+            if (selectedFormat === 'png') mimeType = 'image/png';
+            if (selectedFormat === 'webp') mimeType = 'image/webp';
+
+            // Get the upscaled image data from canvas
+            const upscaledDataUrl = canvas.toDataURL(mimeType);
+
+            // Create a download link for upscaled image
+            const fileName = `upscaled-${processedFileName}-${selectedResolution}.${selectedFormat}`;
+            const downloadLink = document.createElement('a');
+            downloadLink.href = upscaledDataUrl;
+            downloadLink.download = fileName;
+
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            showToast(`Image downloaded as ${fileName}`);
+        };
+        img.src = processedImageData;
+    });
+</script>
                 // Create a download link
                 const downloadLink = document.createElement('a');
                 const fileName = `upscaled-${processedFileName}-${selectedResolution}.${selectedFormat}`;
