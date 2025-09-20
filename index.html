@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpscalePro | Convert Low-Res Images to 2K/4K</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3b5be3;
+            --secondary: #6c757d;
+            --dark: #1d2636;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border-radius: 8px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: #333;
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 22px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: var(--dark);
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            background: linear-gradient(135deg, #f5f7ff 0%, #e8efff 100%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            padding: 50px 0;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .upload-container {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+
+        .upload-box {
+            border: 2px dashed #ccc;
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .upload-box:hover {
+            border-color: var(--primary);
+        }
+
+        .upload-box i {
+            font-size: 50px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .upload-box h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+            font-size: 1.3rem;
+        }
+
+        .upload-box p {
+            color: var(--secondary);
+            font-size: 1rem;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .format-info {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .format-item {
+            display: flex;
+            align-items: center;
+            background-color: #f0f4ff;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+
+        .format-item i {
+            color: var(--primary);
+            margin-right: 6px;
+            font-size: 14px;
+        }
+
+        /* Resolution options */
+        .resolution-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .resolution-option {
+            display: flex;
+            align-items: center;
+            background-color: #f0f4ff;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .resolution-option input {
+            margin-right: 8px;
+        }
+
+        .resolution-option:hover {
+            background-color: #e2e9ff;
+        }
+
+        .resolution-option.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Format options */
+        .format-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .format-option {
+            display: flex;
+            align-items: center;
+            background-color: #f0f4ff;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .format-option input {
+            margin-right: 8px;
+        }
+
+        .format-option:hover {
+            background-color: #e2e9ff;
+        }
+
+        .format-option.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Preview Section */
+        .preview-section {
+            display: none;
+            padding: 40px 0;
+            background-color: #f9fafc;
+        }
+
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .preview-card {
+            flex: 1;
+            min-width: 280px;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .preview-header {
+            padding: 12px 15px;
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .preview-image {
+            padding: 15px;
+            text-align: center;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-image img {
+            max-width: 100%;
+            max-height: 220px;
+            border-radius: 4px;
+            object-fit: contain;
+        }
+
+        .preview-info {
+            padding: 12px 15px;
+            text-align: center;
+            background-color: #f8f9fa;
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f0f4ff;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+            background-color: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 12px;
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 60px 0;
+            background-color: #f9fafc;
+        }
+
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 220px;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .step-number {
+            width: 45px;
+            height: 45px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            font-size: 0.95rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 60px 0;
+            background-color: white;
+        }
+
+        .pricing-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .pricing-card {
+            flex: 1;
+            min-width: 250px;
+            max-width: 320px;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            transform: scale(1.05);
+            border: 2px solid var(--primary);
+            z-index: 1;
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: 15px;
+            right: -30px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-header {
+            padding: 25px;
+            text-align: center;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .pricing-body {
+            padding: 25px;
+        }
+
+        .price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .price span {
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .pricing-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .pricing-features li i {
+            margin-right: 8px;
+        }
+
+        .pricing-action {
+            text-align: center;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .form-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .form-step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-bottom: 3px solid #ddd;
+            color: var(--secondary);
+        }
+
+        .form-step.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .form-page {
+            display: none;
+        }
+
+        .form-page.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+            
+            .navbar {
+                padding: 12px 0;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.7rem;
+            }
+            
+            .upload-container {
+                padding: 20px;
+            }
+            
+            .upload-box {
+                padding: 30px 15px;
+            }
+            
+            .upload-box i {
+                font-size: 40px;
+            }
+            
+            .preview-card {
+                min-width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+            
+            .pricing-card.featured::before {
+                top: 10px;
+                right: -28px;
+                font-size: 0.7rem;
+                padding: 4px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 40px 0 30px;
+            }
+            
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .format-item {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            
+            .feature-card, .step, .pricing-card {
+                min-width: 100%;
+            }
+            
+            .footer-column {
+                min-width: 100%;
+            }
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background-color: var(--danger);
+        }
+
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <span>UpscalePro</span>
+                </a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#upload">Upload</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="support.html">Support</a></li>
+                </ul>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <a href="#upload" class="btn">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Transform Your Low-Res Images to Stunning 2K/4K</h1>
+            <p>Our advanced AI-powered upscaling technology enhances image quality while preserving details, giving you crystal clear results every time.</p>
+            <a href="#upload" class="btn">Upscale Now</a>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="upload-section" id="upload">
+        <div class="container">
+            <div class="section-title">
+                <h2>Upscale Your Images</h2>
+                <p>Upload your low-resolution images and let our AI work its magic</p>
+            </div>
+            <div class="upload-container">
+                <div class="upload-box" id="drop-zone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Drag & Drop Your Image Here</h3>
+                    <p>or click to browse your files</p>
+                    <input type="file" id="file-input" accept="image/*">
+                </div>
+                
+                <div class="resolution-options">
+                    <label class="resolution-option" id="option-2k">
+                        <input type="radio" name="resolution" value="2k" checked>
+                        <span>Upscale to 2K (2560×1440)</span>
+                    </label>
+                    <label class="resolution-option" id="option-4k">
+                        <input type="radio" name="resolution" value="4k">
+                        <span>Upscale to 4K (3840×2160)</span>
+                    </label>
+                </div>
+                
+                <div class="format-options">
+                    <label class="format-option" id="option-jpg">
+                        <input type="radio" name="format" value="jpg" checked>
+                        <span>JPG Format</span>
+                    </label>
+                    <label class="format-option" id="option-png">
+                        <input type="radio" name="format" value="png">
+                        <span>PNG Format</span>
+                    </label>
+                    <label class="format-option" id="option-webp">
+                        <input type="radio" name="format" value="webp">
+                        <span>WebP Format</span>
+                    </label>
+                </div>
+                
+                <div class="spinner" id="spinner"></div>
+                <div class="format-info">
+                    <div class="format-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Supports: JPG, PNG, WebP</span>
+                    </div>
+                    <div class="format-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Max file size: 20MB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preview Section -->
+    <section class="preview-section" id="preview">
+        <div class="container">
+            <div class="section-title">
+                <h2>Preview Results</h2>
+                <p>Compare original and upscaled versions</p>
+            </div>
+            <div class="preview-container">
+                <div class="preview-card">
+                    <div class="preview-header">
+                        <h3>Original Image</h3>
+                    </div>
+                    <div class="preview-image">
+                        <img id="original-img" src="" alt="Original image">
+                    </div>
+                    <div class="preview-info">
+                        <p id="original-info">Resolution: 640x480</p>
+                    </div>
+                </div>
+                <div class="preview-card">
+                    <div class="preview-header">
+                        <h3>Upscaled Image</h3>
+                        <span id="resolution-label">(2K)</span>
+                    </div>
+                    <div class="preview-image">
+                        <img id="upscaled-img" src="" alt="Upscaled image">
+                    </div>
+                    <div class="preview-info">
+                        <p id="upscaled-info">Resolution: 2560x1440 (2K)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-success" id="download-btn">
+                    <i class="fas fa-download"></i> Download Upscaled Image
+                </button>
+                <button class="btn btn-secondary" id="upscale-another">
+                    <i class="fas fa-redo"></i> Upscale Another Image
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose UpscalePro?</h2>
+                <p>Our advanced technology delivers superior results</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Upscaling</h3>
+                    <p>Our deep learning algorithms analyze and enhance images with incredible precision.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Fast Processing</h3>
+                    <p>Get your upscaled images in seconds, not hours, with our optimized processing engine.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy Guaranteed</h3>
+                    <p>Your images are processed securely and never stored on our servers after processing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Upscaling your images is simple and straightforward</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Image</h3>
+                    <p>Select your low-resolution image from your device or drag and drop it into the upload area.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>AI Processing</h3>
+                    <p>Our advanced AI algorithms analyze and enhance your image to 2K or 4K resolution.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Download Result</h3>
+                    <p>Preview the enhanced image and download it in your preferred format.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h2>Transparent Pricing</h2>
+                <p>Choose the plan that works best for you</p>
+            </div>
+            <div class="pricing-options">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Free Trial</h3>
+                    </div>
+                    <div class="pricing-body">
+                        <div class="price">$0 <span>/ forever</span></div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> 5 images per month</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Upscale to 2K resolution</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Basic enhancement</li>
+                            <li><i class="fas fa-times" style="color: #dc3545;"></i> No priority processing</li>
+                            <li><i class="fas fa-times" style="color: #dc3545;"></i> Watermark on output</li>
+                        </ul>
+                        <div class="pricing-action">
+                            <button class="btn" onclick="openModal('free')">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-header">
+                        <h3>Pro Plan</h3>
+                    </div>
+                    <div class="pricing-body">
+                        <div class="price">$9 <span>/ month</span></div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> 100 images per month</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Upscale to 4K resolution</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Advanced enhancement</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Priority processing</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> No watermark</li>
+                        </ul>
+                        <div class="pricing-action">
+                            <button class="btn" onclick="openModal('pro')">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enterprise</h3>
+                    </div>
+                    <div class="pricing-body">
+                        <div class="price">$29 <span>/ month</span></div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Unlimited images</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Upscale to 8K resolution</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Premium enhancement</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Instant processing</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> Batch processing</li>
+                        </ul>
+                        <div class="pricing-action">
+                            <button class="btn" onclick="openModal('enterprise')">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>UpscalePro</h3>
+                    <p>Transforming low-resolution images to stunning 2K and 4K quality with advanced AI technology.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#upload">Upload</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="support.html">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="support.html#help">Help Center</a></li>
+                        <li><a href="support.html#faq">FAQs</a></li>
+                        <li><a href="support.html#terms">Terms of Service</a></li>
+                        <li><a href="support.html#privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@upscalepro.com</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> San Francisco, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 UpscalePro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Subscription Modal -->
+    <div class="modal" id="subscription-modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2 id="modal-title">Subscribe to Pro Plan</h2>
+                <p>Complete your subscription in a few simple steps</p>
+            </div>
+            
+            <div class="form-steps">
+                <div class="form-step active" id="step-1">1. Plan</div>
+                <div class="form-step" id="step-2">2. Account</div>
+                <div class="form-step" id="step-3">3. Payment</div>
+                <div class="form-step" id="step-4">4. Confirm</div>
+            </div>
+            
+            <div class="form-page active" id="page-1">
+                <div class="form-group">
+                    <h3>Selected Plan: <span id="selected-plan">Pro Plan</span></h3>
+                    <p>Price: $9/month</p>
+                </div>
+                <button class="btn" onclick="nextPage(2)">Continue</button>
+            </div>
+            
+            <div class="form-page" id="page-2">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Create a password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm your password">
+                </div>
+                <button class="btn" onclick="nextPage(3)">Continue</button>
+            </div>
+            
+            <div class="form-page" id="page-3">
+                <div class="form-group">
+                    <label for="card-name">Name on Card</label>
+                    <input type="text" id="card-name" placeholder="Enter name on card">
+                </div>
+                <div class="form-group">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" placeholder="Enter card number">
+                </div>
+                <div class="form-group" style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label for="expiry">Expiry Date</label>
+                        <input type="text" id="expiry" placeholder="MM/YY">
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" placeholder="CVV">
+                    </div>
+                </div>
+                <button class="btn" onclick="nextPage(4)">Complete Payment</button>
+            </div>
+            
+            <div class="form-page" id="page-4">
+                <div style="text-align: center;">
+                    <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success); margin-bottom: 20px;"></i>
+                    <h3>Subscription Successful!</h3>
+                    <p>Thank you for subscribing to our <span id="success-plan">Pro Plan</span>. You now have access to all premium features.</p>
+                    <button class="btn" onclick="closeModal()">Start Upscaling</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Operation completed successfully!</span>
+    </div>
+
+    <script>
+        /**
+         * @file Manages the core functionality of the UpscalePro application, including image uploading, processing, and UI interactions.
+         */
+
+        // Global variables
+        /** @type {string} The selected resolution for upscaling ('2k' or '4k'). */
+        let selectedResolution = '2k';
+        /** @type {string} The selected output format for the upscaled image ('jpg', 'png', or 'webp'). */
+        let selectedFormat = 'jpg';
+        /** @type {?string} The base64 encoded data of the processed image. */
+        let processedImageData = null;
+        /** @type {string} The MIME type of the processed image. */
+        let processedImageType = '';
+        /** @type {string} The original file name of the processed image without the extension. */
+        let processedFileName = '';
+        /** @type {string} The current subscription plan selected in the modal. */
+        let currentPlan = 'pro';
+        /** @type {number} The current page number in the subscription modal form. */
+        let currentPage = 1;
+
+        /**
+         * Initializes the application after the DOM is fully loaded.
+         * Sets up event listeners for all interactive elements.
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('file-input');
+            const dropZone = document.getElementById('drop-zone');
+            const previewSection = document.querySelector('.preview-section');
+            const uploadSection = document.querySelector('.upload-section');
+            const originalImg = document.getElementById('original-img');
+            const upscaledImg = document.getElementById('upscaled-img');
+            const originalInfo = document.getElementById('original-info');
+            const upscaledInfo = document.getElementById('upscaled-info');
+            const downloadBtn = document.getElementById('download-btn');
+            const upscaleAnotherBtn = document.getElementById('upscale-another');
+            const spinner = document.getElementById('spinner');
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            const option2k = document.getElementById('option-2k');
+            const option4k = document.getElementById('option-4k');
+            const optionJpg = document.getElementById('option-jpg');
+            const optionPng = document.getElementById('option-png');
+            const optionWebp = document.getElementById('option-webp');
+            const resolutionLabel = document.getElementById('resolution-label');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+            
+            // Resolution selection
+            option2k.addEventListener('click', function() {
+                selectedResolution = '2k';
+                option2k.classList.add('selected');
+                option4k.classList.remove('selected');
+            });
+            
+            option4k.addEventListener('click', function() {
+                selectedResolution = '4k';
+                option4k.classList.add('selected');
+                option2k.classList.remove('selected');
+            });
+            
+            // Format selection
+            optionJpg.addEventListener('click', function() {
+                selectedFormat = 'jpg';
+                optionJpg.classList.add('selected');
+                optionPng.classList.remove('selected');
+                optionWebp.classList.remove('selected');
+            });
+            
+            optionPng.addEventListener('click', function() {
+                selectedFormat = 'png';
+                optionPng.classList.add('selected');
+                optionJpg.classList.remove('selected');
+                optionWebp.classList.remove('selected');
+            });
+            
+            optionWebp.addEventListener('click', function() {
+                selectedFormat = 'webp';
+                optionWebp.classList.add('selected');
+                optionJpg.classList.remove('selected');
+                optionPng.classList.remove('selected');
+            });
+            
+            // Initialize selected options
+            option2k.classList.add('selected');
+            optionJpg.classList.add('selected');
+            
+            // Click on drop zone to trigger file input
+            dropZone.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            // Handle file selection
+            fileInput.addEventListener('change', function(e) {
+                if (this.files && this.files[0]) {
+                    processImage(this.files[0]);
+                }
+            });
+            
+            // Drag and drop handling
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#4a6cf7';
+                this.style.backgroundColor = '#f0f4ff';
+            });
+            
+            dropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#ccc';
+                this.style.backgroundColor = 'transparent';
+            });
+            
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#ccc';
+                this.style.backgroundColor = 'transparent';
+                
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    processImage(e.dataTransfer.files[0]);
+                }
+            });
+            
+            /**
+             * Processes the uploaded image file. Validates the file, reads it as a data URL,
+             * and simulates the upscaling process.
+             * @param {File} file - The image file to process.
+             */
+            function processImage(file) {
+                if (!file.type.match('image.*')) {
+                    showToast('Please upload an image file.', 'error');
+                    return;
+                }
+                
+                if (file.size > 20 * 1024 * 1024) {
+                    showToast('File size exceeds 20MB limit.', 'error');
+                    return;
+                }
+                
+                // Store the original file name
+                processedFileName = file.name.split('.')[0];
+                
+                // Show loading spinner
+                spinner.style.display = 'block';
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Store the original image data and type
+                    processedImageType = file.type;
+                    
+                    // Display original image
+                    originalImg.src = e.target.result;
+                    
+                    // Get image dimensions
+                    const img = new Image();
+                    img.onload = function() {
+                        const originalWidth = img.width;
+                        const originalHeight = img.height;
+                        
+                        // Update original info
+                        originalInfo.textContent = `Resolution: ${originalWidth}x${originalHeight} • Size: ${formatFileSize(file.size)}`;
+                        
+                        // Simulate upscaling process
+                        setTimeout(() => {
+                            // Hide spinner
+                            spinner.style.display = 'none';
+                            
+                            // Determine target resolution
+                            let targetWidth, targetHeight, resolutionText;
+                            
+                            if (selectedResolution === '2k') {
+                                targetWidth = 2560;
+                                targetHeight = 1440;
+                                resolutionText = '2K';
+                            } else {
+                                targetWidth = 3840;
+                                targetHeight = 2160;
+                                resolutionText = '4K';
+                            }
+                            
+                            // Update resolution label
+                            resolutionLabel.textContent = `(${resolutionText})`;
+                            
+                            // For demo purposes, we're using the same image but simulating upscaling
+                            // In a real application, this would be the actual upscaled version from the server
+                            upscaledImg.src = e.target.result;
+                            
+                            // Calculate simulated file size (larger due to upscaling)
+                            const simulatedSize = Math.min(file.size * 3.5, 10 * 1024 * 1024); // Cap at 10MB for demo
+                            
+                            // Update upscaled info
+                            upscaledInfo.textContent = `Resolution: ${targetWidth}x${targetHeight} (${resolutionText}) • Size: ${formatFileSize(simulatedSize)}`;
+                            
+                            // Store the processed image data for download
+                            processedImageData = e.target.result;
+                            
+                            // Show preview section
+                            uploadSection.style.display = 'none';
+                            previewSection.style.display = 'block';
+                            
+                            // Scroll to preview section
+                            document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
+                            
+                            // Show success message
+                            showToast(`Image successfully upscaled to ${resolutionText}!`);
+                        }, 2000); // Simulate 2 second processing time
+                    };
+                    img.src = e.target.result;
+                };
+                
+                reader.readAsDataURL(file);
+            }
+            
+            /**
+             * Formats a file size in bytes to a human-readable string (KB, MB).
+             * @param {number} bytes - The file size in bytes.
+             * @returns {string} The formatted file size.
+             */
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                else return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+            
+            // Download button handler
+            downloadBtn.addEventListener('click', function() {
+                if (!processedImageData) {
+                    showToast('No image available for download.', 'error');
+                    return;
+                }
+                
+                // Create a download link
+                const downloadLink = document.createElement('a');
+                const fileName = `upscaled-${processedFileName}-${selectedResolution}.${selectedFormat}`;
+                
+                // In a real application, this would be the actual upscaled image data
+                // For demo purposes, we're using the original image data
+                downloadLink.href = processedImageData;
+                downloadLink.download = fileName;
+                
+                // Trigger download
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                // Show success message
+                showToast(`Image downloaded as ${fileName}`);
+            });
+            
+            // Upscale another button handler
+            upscaleAnotherBtn.addEventListener('click', function() {
+                previewSection.style.display = 'none';
+                uploadSection.style.display = 'block';
+                fileInput.value = '';
+                processedImageData = null;
+                document.getElementById('upload').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            /**
+             * Displays a toast notification with a message and type.
+             * @param {string} message - The message to display in the toast.
+             * @param {('success'|'error'|'warning')} [type='success'] - The type of toast notification.
+             */
+            function showToast(message, type = 'success') {
+                toastMessage.textContent = message;
+                toast.className = 'toast';
+                
+                if (type === 'error') {
+                    toast.classList.add('error');
+                    toast.querySelector('i').className = 'fas fa-exclamation-circle';
+                } else if (type === 'warning') {
+                    toast.classList.add('warning');
+                    toast.querySelector('i').className = 'fas fa-exclamation-triangle';
+                } else {
+                    toast.querySelector('i').className = 'fas fa-check-circle';
+                }
+                
+                toast.classList.add('show');
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') return;
+                    
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    
+                    // Close mobile menu if open
+                    navLinks.classList.remove('active');
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+
+        /**
+         * Opens the subscription modal and sets the selected plan.
+         * @param {('free'|'pro'|'enterprise')} plan - The subscription plan to feature in the modal.
+         */
+        function openModal(plan) {
+            currentPlan = plan;
+            const modal = document.getElementById('subscription-modal');
+            const planTitle = document.getElementById('selected-plan');
+            const successPlan = document.getElementById('success-plan');
+            
+            // Set plan title based on selection
+            let planName, planPrice;
+            switch(plan) {
+                case 'free':
+                    planName = 'Free Plan';
+                    planPrice = '$0';
+                    break;
+                case 'pro':
+                    planName = 'Pro Plan';
+                    planPrice = '$9';
+                    break;
+                case 'enterprise':
+                    planName = 'Enterprise Plan';
+                    planPrice = '$29';
+                    break;
+            }
+            
+            planTitle.textContent = `${planName} (${planPrice}/month)`;
+            successPlan.textContent = planName;
+            document.getElementById('modal-title').textContent = `Subscribe to ${planName}`;
+            
+            // Reset form to first page
+            currentPage = 1;
+            updateFormSteps();
+            
+            modal.style.display = 'flex';
+        }
+
+        /**
+         * Closes the subscription modal.
+         */
+        function closeModal() {
+            const modal = document.getElementById('subscription-modal');
+            modal.style.display = 'none';
+        }
+
+        /**
+         * Navigates to the specified page number in the subscription modal form.
+         * @param {number} pageNum - The page number to navigate to.
+         */
+        function nextPage(pageNum) {
+            currentPage = pageNum;
+            updateFormSteps();
+        }
+
+        /**
+         * Updates the visual state of the form steps in the subscription modal.
+         */
+        function updateFormSteps() {
+            // Update step indicators
+            for (let i = 1; i <= 4; i++) {
+                const step = document.getElementById(`step-${i}`);
+                const page = document.getElementById(`page-${i}`);
+                
+                if (i === currentPage) {
+                    step.classList.add('active');
+                    page.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                    page.classList.remove('active');
+                }
+            }
+        }
+
+        // Close modal if clicked outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('subscription-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

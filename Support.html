@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpscalePro - Support & Legal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3b5be3;
+            --secondary: #6c757d;
+            --dark: #1d2636;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --border-radius: 8px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            margin-right: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 22px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #f5f7ff 0%, #e8efff 100%);
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .content-section h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f4ff;
+        }
+
+        .content-section h3 {
+            color: var(--dark);
+            margin: 25px 0 15px;
+        }
+
+        .content-section p {
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .content-section ul, .content-section ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .content-section li {
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        /* FAQ Styles */
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f0f4ff;
+            padding-bottom: 20px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question i {
+            transition: var(--transition);
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            color: var(--secondary);
+            display: none;
+            padding: 15px;
+            background-color: #f9fafc;
+            border-radius: var(--border-radius);
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: #f9fafc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 10px;
+        }
+
+        .toc a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .toc a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 0;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+            
+            .footer-column {
+                min-width: 100%;
+            }
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-image"></i>
+                    <span>UpscalePro</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#upload">Upload</a></li>
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="#help">Help Center</a></li>
+                </ul>
+                <a href="index.html#upload" class="btn">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Support & Legal Documents</h1>
+            <p>Find answers to your questions and learn about our policies</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h3>On This Page</h3>
+            <ul>
+                <li><a href="#help">Help Center</a></li>
+                <li><a href="#faq">Frequently Asked Questions</a></li>
+                <li><a href="#terms">Terms of Service</a></li>
+                <li><a href="#privacy">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <!-- Help Center -->
+        <section id="help" class="content-section">
+            <h2>Help Center</h2>
+            <p>Welcome to the UpscalePro Help Center. Here you'll find resources to help you get the most out of our image upscaling service.</p>
+            
+            <h3>Getting Started</h3>
+            <p>To begin upscaling your images, simply follow these steps:</p>
+            <ol>
+                <li>Navigate to the Upload section on our homepage</li>
+                <li>Drag and drop your image or click to browse your files</li>
+                <li>Select your desired resolution (2K or 4K)</li>
+                <li>Wait for the processing to complete</li>
+                <li>Preview and download your upscaled image</li>
+            </ol>
+            
+            <h3>Supported Formats</h3>
+            <p>UpscalePro supports the following image formats:</p>
+            <ul>
+                <li>JPEG/JPG</li>
+                <li>PNG</li>
+                <li>WebP</li>
+                <li>BMP</li>
+                <li>TIFF</li>
+            </ul>
+            
+            <h3>Contact Support</h3>
+            <p>If you can't find the answer to your question in our documentation, our support team is here to help.</p>
+            <p>Email: <a href="mailto:support@upscalepro.com">support@upscalepro.com</a></p>
+            <p>Response time: Typically within 24 hours</p>
+        </section>
+
+        <!-- FAQs -->
+        <section id="faq" class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How does the upscaling process work?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>UpscalePro uses advanced AI algorithms to analyze your image and intelligently increase its resolution while preserving details and reducing artifacts. The process enhances image quality by predicting and adding missing details that would be present in a higher-resolution version of the image.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What's the maximum file size I can upload?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The maximum file size for uploads is 20MB. This limit ensures optimal processing times and quality results. If your image is larger than 20MB, we recommend resizing it before uploading.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How long does the upscaling process take?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Processing time depends on the size and complexity of your image, but typically takes between 15-60 seconds. Larger images or those with more detail may take slightly longer to process.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Will upscaling reduce image quality?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>No, our AI-powered upscaling is specifically designed to enhance image quality. Unlike traditional resizing methods that can cause blurriness or pixelation, our technology intelligently adds detail to create a sharper, clearer image at higher resolutions.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I use upscaled images commercially?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, you retain all rights to your original images and the upscaled versions. You can use upscaled images for personal or commercial purposes, provided you have the appropriate rights to the original image.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What happens to my images after processing?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We take your privacy seriously. Your images are processed on our servers but are automatically deleted within 24 hours of processing. We do not store, share, or use your images for any purpose other than providing the upscaling service you requested.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What payment methods do you accept?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for annual plans. All payments are processed securely through encrypted channels.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I cancel my subscription anytime?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, you can cancel your subscription at any time from your account settings. If you cancel during a billing period, you will retain access to premium features until the end of that billing cycle.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terms of Service -->
+        <section id="terms" class="content-section">
+            <h2>Terms of Service</h2>
+            <p><strong>Last Updated: January 1, 2023</strong></p>
+            
+            <h3>1. Acceptance of Terms</h3>
+            <p>By accessing or using the UpscalePro website and services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing our services.</p>
+            
+            <h3>2. Use License</h3>
+            <p>Permission is granted to temporarily use UpscalePro's services for personal and commercial purposes. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+            <ul>
+                <li>Modify or copy the materials;</li>
+                <li>Use the materials for any commercial purpose or for any public display;</li>
+                <li>Attempt to reverse engineer any software contained on UpscalePro's website;</li>
+                <li>Remove any copyright or other proprietary notations from the materials; or</li>
+                <li>Transfer the materials to another person or "mirror" the materials on any other server.</li>
+            </ul>
+            
+            <h3>3. User Content</h3>
+            <p>You retain all rights to any images you upload to UpscalePro. By uploading content, you grant us a limited license to process that content only to provide the service. We claim no ownership rights over your content.</p>
+            
+            <h3>4. Limitations</h3>
+            <p>In no event shall UpscalePro or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on UpscalePro's website.</p>
+            
+            <h3>5. Account Responsibility</h3>
+            <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account.</p>
+            
+            <h3>6. Payments and Refunds</h3>
+            <p>All paid plans are subscription-based and will automatically renew until canceled. We offer a 14-day money-back guarantee for all new subscriptions. Refund requests after 14 days will be considered on a case-by-case basis.</p>
+            
+            <h3>7. Changes to Terms</h3>
+            <p>UpscalePro may revise these terms of service at any time without notice. By using this website, you are agreeing to be bound by the then-current version of these Terms of Service.</p>
+        </section>
+
+        <!-- Privacy Policy -->
+        <section id="privacy" class="content-section">
+            <h2>Privacy Policy</h2>
+            <p><strong>Last Updated: January 1, 2023</strong></p>
+            
+            <h3>1. Information We Collect</h3>
+            <p>We collect information you provide directly to us, such as when you create an account, upload images, or contact us for support. This may include:</p>
+            <ul>
+                <li>Account information (name, email address, password)</li>
+                <li>Payment information (processed by our secure payment partners)</li>
+                <li>Images you upload for processing</li>
+                <li>Communications with our support team</li>
+            </ul>
+            
+            <h3>2. How We Use Your Information</h3>
+            <p>We use the information we collect to:</p>
+            <ul>
+                <li>Provide, maintain, and improve our services</li>
+                <li>Process your images and deliver the upscaled results</li>
+                <li>Send you technical notices, updates, and support messages</li>
+                <li>Respond to your comments and questions</li>
+                <li>Monitor and analyze trends, usage, and activities</li>
+            </ul>
+            
+            <h3>3. Image Privacy</h3>
+            <p>We understand that your images may be sensitive. We want to assure you that:</p>
+            <ul>
+                <li>Your images are processed automatically without human review</li>
+                <li>Images are encrypted during transmission and storage</li>
+                <li>All uploaded images are automatically deleted within 24 hours of processing</li>
+                <li>We do not use your images to train our AI models without explicit permission</li>
+            </ul>
+            
+            <h3>4. Information Sharing</h3>
+            <p>We do not sell, trade, or otherwise transfer your personal information to outside parties except:</p>
+            <ul>
+                <li>To trusted third parties who assist us in operating our website</li>
+                <li>When required by law or to protect our rights</li>
+                <li>With your consent</li>
+            </ul>
+            
+            <h3>5. Data Security</h3>
+            <p>We implement appropriate security measures to protect your personal information. All data is encrypted using SSL technology, and payment transactions are processed through secure gateways.</p>
+            
+            <h3>6. Your Rights</h3>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access and receive a copy of your personal data</li>
+                <li>Correct inaccurate or incomplete information</li>
+                <li>Delete your personal data</li>
+                <li>Object to or restrict processing of your data</li>
+                <li>Withdraw consent at any time</li>
+            </ul>
+            
+            <h3>7. Cookies</h3>
+            <p>We use cookies and similar technologies to track activity on our website and hold certain information. Cookies are files with a small amount of data that may include an anonymous unique identifier.</p>
+            
+            <h3>8. Changes to This Policy</h3>
+            <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+            
+            <h3>9. Contact Us</h3>
+            <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:privacy@upscalepro.com">privacy@upscalepro.com</a>.</p>
+        </section>
+    </div>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>UpscalePro</h3>
+                    <p>Transforming low-resolution images to stunning 2K and 4K quality with advanced AI technology.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#upload">Upload</a></li>
+                        <li><a href="index.html#features">Features</a></li>
+                        <li><a href="index.html#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#help">Help Center</a></li>
+                        <li><a href="#faq">FAQs</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@upscalepro.com</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> San Francisco, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 UpscalePro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * @file Manages the interactive elements on the Support page, including the FAQ accordion and smooth scrolling.
+         */
+
+        /**
+         * Initializes the support page functionality after the DOM is fully loaded.
+         * Sets up event listeners for FAQ toggles, the back-to-top button, and smooth scrolling.
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ toggle functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const isActive = question.classList.contains('active');
+                    
+                    // Close all answers
+                    document.querySelectorAll('.faq-answer').forEach(ans => {
+                        ans.classList.remove('show');
+                    });
+                    document.querySelectorAll('.faq-question').forEach(q => {
+                        q.classList.remove('active');
+                    });
+                    
+                    // Open clicked answer if it wasn't already active
+                    if (!isActive) {
+                        answer.classList.add('show');
+                        question.classList.add('active');
+                    }
+                });
+            });
+            
+            // Back to top button
+            const backToTopButton = document.querySelector('.back-to-top');
+            
+            /**
+             * Shows or hides the back-to-top button based on the scroll position.
+             */
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+            
+            /**
+             * Scrolls the page to the top when the back-to-top button is clicked.
+             * @param {Event} e - The click event.
+             */
+            backToTopButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') return;
+                    
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
